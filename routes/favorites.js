@@ -4,10 +4,12 @@ const axios = require('axios');
 const mongoose = require('mongoose');
 
 router.get('/', async (req, res) => {
-  const { user } = req;
+  const { userId } = req.user.sub;
 
   try {
-    res.status(200).send(user);
+    const Favorite = mongoose.model('Favorite');
+    const favorites = await Favorite.find({ sub: userId });
+    res.status(200).send(favorites);
   } catch (err) {
     console.log(err);
   }
@@ -48,6 +50,22 @@ router.post('/', async (req, res) => {
   } catch (err) {
     console.log(err);
     return res.status(400).send({ message: 'Unable to save favorite' });
+  }
+});
+
+router.delete('/', async (req, res) => {
+  try {
+    const Favorite = mongoose.model('Favorite')
+    const { uri } = req.body;
+    console.log('URI', uri);
+    await Favorite.deleteOne({
+      uri,
+      user: req.user.sub,
+    });
+    return res.status(200).send({ message: 'Record deleted successfully' });
+  } catch (err) {
+    console.log(err);
+    return res.status(400).send({ message: 'Unable to delete record.' });
   }
 });
 

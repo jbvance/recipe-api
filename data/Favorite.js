@@ -9,7 +9,7 @@ const ingredientModel = new Schema({
 
 const favoriteModel = new Schema({
   user: { type: mongoose.Types.ObjectId, required: true },
-  uri: { type: String, required: true },
+  uri: { type: String, required: true, unique: true },
   url: { type: String },
   calories: { type: Number },
   image: { type: String },
