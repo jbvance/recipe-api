@@ -3,6 +3,7 @@ var router = express.Router();
 const axios = require('axios');
 
 router.get('/search', async (req, res) => {
+  try {
   //`https://api.edamam.com/search?q=beef&diet=high-protein&diet=low-carb&diet=low-fat&app_id=${process.env.APP_ID}&app_key=${process.env.APP_KEY}&from=0&to=60&time=1-120&format=json`;
   const { q, r } = req.query;
   if (!q && !r) {
@@ -16,7 +17,7 @@ router.get('/search', async (req, res) => {
     : `https://api.edamam.com/search?r=${r}&app_id=${process.env.APP_ID}&app_key=${process.env.APP_KEY}&from=0&to=60&time=1-120&format=json`;
   console.log('URL', url);
 
-  try {
+
     const response = await axios.get(url);
     //console.log(response);
     res.status(200).send(response.data);
